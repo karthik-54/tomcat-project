@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+tools {
+  maven 'MVN_HOME'
+}
+    stages {
+        stage('SCM-Checkout') {
+            steps {
+                git branch: 'main', credentialsId: 'git-credentials', url: 'https://github.com/karthik-54/tomcat-project.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        stage('Sonar-Testing') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('Package') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+        stage('Tomcat-Deployment') {
+            steps {
+                sh 'mvn clean'
+            }
+        }
+    }
+}
